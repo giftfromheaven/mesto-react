@@ -1,26 +1,21 @@
-import '../index.css';
-import { useEffect, useState } from 'react';
-import { api } from '../utils/Api';
+import { useState, useEffect } from 'react';
 import Header from './Header';
+import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
-import Card from './Card';
-import Main from './Main';
+import '../index.css';
 
 function App() {
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-  const [cards, setCards] = useState([]);
-  const [userName, setUserName] = useState('');
-  const [userDescription, setUserDescription] = useState('');
-  const [userAvatar, setUserAvatar] = useState('');
-  const [selectedCard, setSelectedCard] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({ title: '', link: '' });
 
   const handleCardClick = (card) => {
     setSelectedCard(card);
   };
+
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
 
   const onEditProfile = () => {
     setIsEditProfilePopupOpen(true);
@@ -36,29 +31,17 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
-    setSelectedCard(false);
+    setSelectedCard({ title: '', link: '' });
   };
 
   useEffect(() => {
-    api.getCards().then((res) => {
-      const arr = res.map((item) => {
-        return {
-          likes: item.likes.length,
-          title: item.name,
-          link: item.link,
-          id: item._id,
-        };
-      });
-      setCards(arr);
-    });
-  }, []);
-
-  useEffect(() => {
-    api.getUserInfo().then((res) => {
-      setUserName(res.name);
-      setUserDescription(res.about);
-      setUserAvatar(res.avatar);
-    });
+    const closeByEscape = (evt) => {
+      if (evt.key === 'Escape') {
+        closeAllPopups();
+      }
+    };
+    document.addEventListener('keydown', closeByEscape);
+    return () => document.removeEventListener('keydown', closeByEscape);
   }, []);
 
   return (
@@ -66,39 +49,88 @@ function App() {
       <div className='page'>
         <Header />
         <Main
-          userName={userName}
-          userDescription={userDescription}
-          userAvatar={userAvatar}
           handleEditProfileClick={onEditProfile}
           handleAddPlaceClick={onAddPlace}
           handleEditAvatarClick={onEditAvatar}
+          handleCardClick={handleCardClick}
         />
-        <section className='section elements'>
-          <ul className='elements__list'>
-            {cards.map((card) => {
-              return <Card key={card.id} card={card} onCardClick={handleCardClick} />;
-            })}
-          </ul>
-        </section>
         <Footer />
         <PopupWithForm
           name={'edit-profile'}
           title={'Редактировать профиль'}
+          buttonText={'Сохранить'}
           isOpen={isEditProfilePopupOpen}
-          onClose={closeAllPopups}
-        />
+          onClose={closeAllPopups}>
+          <input
+            className='popup__input'
+            id='name'
+            type='text'
+            placeholder='Имя'
+            name='name'
+            required
+            minLength='2'
+            maxLength='40'
+          />
+          <span className='popup__input-error' id='name-error'>
+            Mistake
+          </span>
+          <input
+            className='popup__input'
+            id='occupation'
+            type='text'
+            placeholder='Род занятий'
+            name='about'
+            required
+            minLength='2'
+            maxLength='200'
+          />
+          <span className='popup__input-error' id='occupation-error'></span>
+        </PopupWithForm>
         <PopupWithForm
           name={'add-place'}
           title={'Новое место'}
+          buttonText={'Сохранить'}
           isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}
-        />
+          onClose={closeAllPopups}>
+          <input
+            className='popup__input'
+            id='title'
+            type='text'
+            placeholder='Название'
+            name='name'
+            required
+            minLength='2'
+            maxLength='30'
+          />
+          <span className='popup__input-error' id='title-error'>
+            Mistake
+          </span>
+          <input
+            className='popup__input'
+            id='link'
+            type='url'
+            placeholder='Ссылка на картинку'
+            name='link'
+            required
+          />
+          <span className='popup__input-error' id='link-error'></span>
+        </PopupWithForm>
         <PopupWithForm
           name={'edit-avatar'}
           title={'Обновить аватар'}
+          buttonText={'Сохранить'}
           isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}
-        />
+          onClose={closeAllPopups}>
+          <input
+            className='popup__input'
+            id='avatar'
+            type='url'
+            placeholder='Ссылка на картинку'
+            name='avatar'
+            required
+          />
+          <span className='popup__input-error' id='avatar-error'></span>
+        </PopupWithForm>
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
       </div>
     </div>

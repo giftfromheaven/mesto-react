@@ -1,6 +1,4 @@
-import { Children } from 'react';
-
-const PopupWithForm = ({ title, name, isOpen, children, onClose }) => {
+const PopupWithForm = ({ title, name, buttonText, isOpen, children, onClose }) => {
   return (
     <section
       className={isOpen ? 'popup popup_type_input popup_opened' : 'popup popup_type_input'}
@@ -12,10 +10,10 @@ const PopupWithForm = ({ title, name, isOpen, children, onClose }) => {
           className='button popup__exit-button'
           type='button'
           aria-label='Закрыть'></button>
-        <form className='popup__form' id='add-element-form' action='#' name={name} noValidate>
+        <form className='popup__form' action='#' name={name}>
           {children}
-          <button className='button popup__save-button' type='submit' aria-label='Сохранить'>
-            Сохранить
+          <button className='button popup__save-button' type='submit' aria-label={buttonText}>
+            {buttonText}
           </button>
         </form>
       </div>
