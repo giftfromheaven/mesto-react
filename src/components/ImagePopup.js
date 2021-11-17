@@ -1,4 +1,4 @@
-export const ImagePopup = ({ card, onClose }) => {
+const ImagePopup = ({ card, onClose }) => {
   return (
     <section
       className={card ? 'popup popup_type_image popup_opened' : 'popup popup_type_image'}
@@ -15,3 +15,5 @@ export const ImagePopup = ({ card, onClose }) => {
     </section>
   );
 };
+
+export default ImagePopup;
