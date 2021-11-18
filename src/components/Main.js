@@ -15,25 +15,35 @@ const Main = ({
   const [userAvatar, setUserAvatar] = useState('');
 
   useEffect(() => {
-    api.getCards().then((res) => {
-      const arr = res.map((item) => {
-        return {
-          likes: item.likes.length,
-          title: item.name,
-          link: item.link,
-          id: item._id,
-        };
+    api
+      .getCards()
+      .then((res) => {
+        const arr = res.map((item) => {
+          return {
+            likes: item.likes.length,
+            title: item.name,
+            link: item.link,
+            id: item._id,
+          };
+        });
+        setCards(arr);
+      })
+      .catch((err) => {
+        console.log(err);
       });
-      setCards(arr);
-    });
   }, []);
 
   useEffect(() => {
-    api.getUserInfo().then((res) => {
-      setUserName(res.name);
-      setUserDescription(res.about);
-      setUserAvatar(res.avatar);
-    });
+    api
+      .getUserInfo()
+      .then((res) => {
+        setUserName(res.name);
+        setUserDescription(res.about);
+        setUserAvatar(res.avatar);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   return (
