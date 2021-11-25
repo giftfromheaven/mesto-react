@@ -9,7 +9,7 @@ const ImagePopup = ({ card, onClose }) => {
           onClick={onClose}
           type='button'
           aria-label='Закрыть'></button>
-        <img className='popup__image' src={card.link} alt='Фото места' />
+        <img className='popup__image' src={card.link} alt={card.name} />
         <h2 className='popup__caption'>{card.name}</h2>
       </div>
     </section>

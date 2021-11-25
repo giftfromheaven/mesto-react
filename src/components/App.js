@@ -59,9 +59,9 @@ function App() {
       .setUserInfo(data)
       .then((res) => {
         setCurrentUser(res);
+        closeAllPopups();
       })
-      .catch((err) => console.log(err))
-      .finally(() => closeAllPopups());
+      .catch((err) => console.log(err));
   };
 
   const handleUpdateAvatar = (data) => {
@@ -69,9 +69,9 @@ function App() {
       .setAvatar(data)
       .then((res) => {
         setCurrentUser(res);
+        closeAllPopups();
       })
-      .catch((err) => console.log(err))
-      .finally(() => closeAllPopups());
+      .catch((err) => console.log(err));
   };
 
   const handleAddPlaceSubmit = (data) => {
@@ -79,9 +79,9 @@ function App() {
       .setCard(data)
       .then((res) => {
         setCards([res, ...cards]);
+        closeAllPopups();
       })
-      .catch((err) => console.log(err))
-      .finally(() => closeAllPopups());
+      .catch((err) => console.log(err));
   };
 
   // card clicked
